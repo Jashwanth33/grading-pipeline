@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+
+# Data (keep structure, ignore large files)
+data/uploads/
+*.csv
+!data/grading_dataset.csv
+!data/doubt_dataset.csv
+
+# Model artifacts
+models/*.pkl
+
+# Logs
+reports/logs/
+*.log
+
+# Node
+frontend/node_modules/
+frontend/build/
+frontend/.cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test
+test_api.py
+debug_fi.py
+generate_report.py
