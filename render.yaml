@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: grading-pipeline
+    runtime: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn backend.app:app --workers 2 --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      - key: APP_NAME
+        value: "GradingPipeline"
+      - key: DEBUG
+        value: "false"
+      - key: LOG_LEVEL
+        value: "INFO"

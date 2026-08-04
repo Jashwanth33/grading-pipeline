@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     log_level: str = Field(default="INFO", env="LOG_LEVEL")
 
     api_host: str = Field(default="0.0.0.0", env="API_HOST")
-    api_port: int = Field(default=8000, env="API_PORT")
+    api_port: int = Field(default=8000, env="PORT")
 
     model_dir: Path = Field(default=BASE_DIR / "models", env="MODEL_DIR")
     data_dir: Path = Field(default=BASE_DIR / "data", env="DATA_DIR")
