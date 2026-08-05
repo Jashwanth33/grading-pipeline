@@ -10,6 +10,8 @@ services:
         value: "3.11.9"
       - key: PORT
         value: "8000"
+      - key: CI
+        value: "false"
       - key: APP_NAME
         value: "GradingPipeline"
       - key: DEBUG
