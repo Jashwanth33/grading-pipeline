@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+const API_BASE = process.env.REACT_APP_API_URL || '/api';
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -19,6 +19,7 @@ api.interceptors.response.use(
 
 export const apiService = {
   train: (data) => api.post('/train', data),
+  trainTriage: (data) => api.post('/train-triage', data),
   predictGrading: (data) => api.post('/predict-grading', data),
   predictDoubt: (data) => api.post('/predict-doubt', data),
   getMetrics: () => api.get('/metrics'),

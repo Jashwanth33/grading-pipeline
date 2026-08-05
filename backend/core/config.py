@@ -27,8 +27,6 @@ class Settings(BaseSettings):
     n_splits: int = Field(default=5, env="N_SPLITS")
 
     confidence_threshold: float = Field(default=0.75, env="CONFIDENCE_THRESHOLD")
-    max_sequence_length: int = Field(default=512, env="MAX_SEQUENCE_LENGTH")
-    embedding_model: str = Field(default="all-MiniLM-L6-v2", env="EMBEDDING_MODEL")
 
     grading_features: list = [
         "test_pass_rate",
@@ -43,9 +41,7 @@ class Settings(BaseSettings):
         "documentation_score",
     ]
 
-    class Config:
-        env_file = str(BASE_DIR / ".env")
-        env_file_encoding = "utf-8"
+    model_config = {"env_file": str(BASE_DIR / ".env"), "env_file_encoding": "utf-8", "extra": "ignore"}
 
     def ensure_directories(self):
         for d in [self.model_dir, self.data_dir, self.reports_dir]:
