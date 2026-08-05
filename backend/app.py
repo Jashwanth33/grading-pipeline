@@ -68,7 +68,7 @@ async def startup():
                     gX_train, gX_val, gX_test, gy_train, gy_val, gy_test, _ = (
                         grading_preprocessor.fit_transform(df, target_col="quality_label")
                     )
-                    grading_trainer.train_all_models(gX_train, gy_train, gX_val, gy_test, cv_folds=3)
+                    grading_trainer.train_all_models(gX_train, gy_train, gX_val, gy_val, cv_folds=3)
                     grading_trainer.target_classes_ = grading_preprocessor.target_classes_
                     grading_trainer.evaluate_on_test(gX_test, gy_test)
                     grading_trainer.compute_feature_importance()
