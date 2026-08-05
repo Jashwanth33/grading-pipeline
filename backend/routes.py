@@ -250,7 +250,10 @@ async def upload_dataset(file: UploadFile = File(...)):
         with open(file_path, "wb") as f:
             f.write(content)
 
-        df = pd.read_csv(file_path)
+        if file.filename.endswith(".json"):
+            df = pd.read_json(file_path)
+        else:
+            df = pd.read_csv(file_path)
         return {
             "status": "success",
             "file_path": str(file_path),
