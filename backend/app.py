@@ -31,9 +31,6 @@ app.include_router(router, prefix="/api")
 BUILD_DIR = Path(__file__).resolve().parent.parent / "frontend" / "build"
 if not BUILD_DIR.exists():
     BUILD_DIR = Path.cwd() / "frontend" / "build"
-logger.info(f"BUILD_DIR: {BUILD_DIR} exists: {BUILD_DIR.exists()}")
-if BUILD_DIR.exists():
-    logger.info(f"BUILD_DIR contents: {list(BUILD_DIR.iterdir())}")
 
 _startup_done = False
 
@@ -117,21 +114,32 @@ def health():
     return {"status": "healthy", "version": settings.app_version}
 
 
-if BUILD_DIR.exists():
-    app.mount("/static", StaticFiles(directory=str(BUILD_DIR / "static")), name="static")
+@app.on_event("startup")
+async def mount_frontend():
+    if BUILD_DIR.exists():
+        app.mount("/static", StaticFiles(directory=str(BUILD_DIR / "static")), name="static")
+        logger.info(f"Mounted frontend from {BUILD_DIR}")
+    else:
+        logger.warning(f"Frontend build not found at {BUILD_DIR}")
 
-    @app.get("/{full_path:path}")
-    async def serve_react(request: Request, full_path: str):
+
+@app.get("/{full_path:path}")
+async def serve_react(request: Request, full_path: str):
+    if BUILD_DIR.exists():
         file_path = BUILD_DIR / full_path
         if file_path.is_file():
             return FileResponse(str(file_path))
         return FileResponse(str(BUILD_DIR / "index.html"))
-else:
-    @app.get("/")
-    def root():
-        return {
-            "app": settings.app_name,
-            "version": settings.app_version,
-            "docs": "/docs",
-            "message": "Frontend build not found. Access API docs at /docs",
-        }
+    return {"message": "Frontend build not found. Access API docs at /docs"}
+
+
+@app.get("/")
+def root():
+    if BUILD_DIR.exists():
+        return FileResponse(str(BUILD_DIR / "index.html"))
+    return {
+        "app": settings.app_name,
+        "version": settings.app_version,
+        "docs": "/docs",
+        "message": "Frontend build not found. Access API docs at /docs",
+    }
