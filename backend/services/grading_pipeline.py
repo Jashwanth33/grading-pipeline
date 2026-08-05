@@ -217,8 +217,11 @@ class GradingModelTrainer:
             comparison[name] = metrics
             logger.info(f"{name} - Accuracy: {metrics['accuracy']:.4f}, F1: {metrics['f1']:.4f}")
 
-        # Select best model
-        self.best_model_name = max(comparison, key=lambda k: comparison[k]["f1"])
+        # Select best model — prefer LightGBM as default
+        if "lightgbm" in comparison:
+            self.best_model_name = "lightgbm"
+        else:
+            self.best_model_name = max(comparison, key=lambda k: comparison[k]["f1"])
         self.best_model = self.models[self.best_model_name]
         logger.info(f"Best model: {self.best_model_name}")
 
