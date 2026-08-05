@@ -114,6 +114,26 @@ def health():
     return {"status": "healthy", "version": settings.app_version}
 
 
+@app.get("/debug")
+def debug():
+    import os
+    cwd = Path.cwd()
+    project_root = Path(__file__).resolve().parent.parent
+    return {
+        "cwd": str(cwd),
+        "cwd_exists": cwd.exists(),
+        "project_root": str(project_root),
+        "project_root_exists": project_root.exists(),
+        "project_root_contents": [str(p) for p in project_root.iterdir()] if project_root.exists() else [],
+        "build_dir": str(BUILD_DIR),
+        "build_dir_exists": BUILD_DIR.exists(),
+        "frontend_dir": str(project_root / "frontend"),
+        "frontend_dir_exists": (project_root / "frontend").exists(),
+        "frontend_contents": [str(p) for p in (project_root / "frontend").iterdir()] if (project_root / "frontend").exists() else [],
+        "cwd_contents": [str(p) for p in cwd.iterdir()] if cwd.exists() else [],
+    }
+
+
 @app.on_event("startup")
 async def mount_frontend():
     if BUILD_DIR.exists():
