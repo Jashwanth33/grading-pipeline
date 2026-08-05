@@ -9,7 +9,7 @@ cd frontend
 npm install --legacy-peer-deps
 
 echo "=== Building React frontend ==="
-CI=false npx react-scripts build
+CI=false npm run build
 
 echo "=== Verifying build output ==="
 ls -la build/
