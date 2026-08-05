@@ -29,6 +29,9 @@ app.add_middleware(
 app.include_router(router, prefix="/api")
 
 BUILD_DIR = Path(__file__).resolve().parent.parent / "frontend" / "build"
+logger.info(f"BUILD_DIR: {BUILD_DIR} exists: {BUILD_DIR.exists()}")
+if BUILD_DIR.exists():
+    logger.info(f"BUILD_DIR contents: {list(BUILD_DIR.iterdir())}")
 
 _startup_done = False
 

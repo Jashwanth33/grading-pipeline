@@ -11,8 +11,14 @@ npm install --legacy-peer-deps
 echo "=== Building React frontend ==="
 npx react-scripts build
 
-echo "=== Generating sample data ==="
+echo "=== Verifying build output ==="
+ls -la build/
+ls -la build/static/
+
 cd ..
+
+echo "=== Generating sample data ==="
 python -m scripts.generate_data
 
 echo "=== Build complete ==="
+echo "Frontend build at: $(pwd)/frontend/build"
