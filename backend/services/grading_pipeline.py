@@ -332,6 +332,7 @@ class GradingModelTrainer:
             "model": self.best_model,
             "feature_engineer": self.feature_engineer,
             "feature_selector": self.feature_selector,
+            "preprocessor": getattr(self, "preprocessor", None),
             "best_model_name": self.best_model_name,
             "results": self.results,
             "cv_results": self.cv_results,
@@ -351,6 +352,7 @@ class GradingModelTrainer:
         self.best_model = artifact["model"]
         self.feature_engineer = artifact["feature_engineer"]
         self.feature_selector = artifact["feature_selector"]
+        self.preprocessor = artifact.get("preprocessor")
         self.best_model_name = artifact["best_model_name"]
         self.results = artifact["results"]
         self.cv_results = artifact.get("cv_results", {})
@@ -363,6 +365,8 @@ class GradingModelTrainer:
     def predict(self, X: pd.DataFrame) -> Dict[str, Any]:
         if self.best_model is None:
             raise ModelError("No model loaded")
+        if self.preprocessor is not None and self.preprocessor.is_fitted:
+            X = self.preprocessor.transform_new(X)
         X_eng = self.feature_engineer.transform(X)
         X_sel = self.feature_selector.transform(X_eng)
         preds = self.best_model.predict(X_sel)

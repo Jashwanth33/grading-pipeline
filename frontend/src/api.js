@@ -5,7 +5,15 @@ const API_BASE = process.env.REACT_APP_API_URL || '/api';
 const api = axios.create({
   baseURL: API_BASE,
   timeout: 120000,
-  headers: { 'Content-Type': 'application/json' },
+});
+
+api.interceptors.request.use((config) => {
+  if (config.data instanceof FormData) {
+    delete config.headers['Content-Type'];
+  } else {
+    config.headers['Content-Type'] = 'application/json';
+  }
+  return config;
 });
 
 api.interceptors.response.use(
@@ -26,9 +34,7 @@ export const apiService = {
   getFeatureImportance: () => api.get('/feature-importance'),
   getModelInfo: () => api.get('/model-info'),
   uploadDataset: (formData) =>
-    api.post('/upload-dataset', formData, {
-      headers: { 'Content-Type': undefined },
-    }),
+    api.post('/upload-dataset', formData),
 };
 
 export default apiService;

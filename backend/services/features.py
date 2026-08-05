@@ -126,11 +126,12 @@ class FeatureSelector:
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:
         if self.selector is None:
             raise ValueError("Selector not fitted")
-        return pd.DataFrame(
-            self.selector.transform(X.fillna(0)),
-            columns=self.selected_features_,
-            index=X.index,
-        )
+        available = [f for f in self.selected_features_ if f in X.columns]
+        missing = [f for f in self.selected_features_ if f not in X.columns]
+        if missing:
+            for f in missing:
+                X[f] = 0.0
+        return X[self.selected_features_].copy()
 
     def fit_transform(self, X: pd.DataFrame, y: pd.Series) -> pd.DataFrame:
         self.fit(X, y)

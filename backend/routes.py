@@ -112,6 +112,7 @@ def train_models(request: TrainRequest):
             )
         )
 
+        grading_trainer.preprocessor = grading_preprocessor
         comparison = grading_trainer.train_all_models(
             gX_train, gy_train, gX_val, gy_val,
             model_names=request.model_types,

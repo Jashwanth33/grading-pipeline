@@ -61,13 +61,14 @@ def _train_models():
                 generate_grading_dataset(2000).to_csv(grading_csv, index=False)
                 generate_doubt_dataset(1500).to_csv(doubt_csv, index=False)
 
-            if not grading_model_path.exists():
-                logger.info("Training grading models...")
-                df = pd.read_csv(grading_csv)
-                gX_train, gX_val, gX_test, gy_train, gy_val, gy_test, _ = (
-                    grading_preprocessor.fit_transform(df, target_col="quality_label")
-                )
-                grading_trainer.train_all_models(gX_train, gy_train, gX_val, gy_val, cv_folds=3)
+                if not grading_model_path.exists():
+                    logger.info("Training grading models...")
+                    df = pd.read_csv(grading_csv)
+                    gX_train, gX_val, gX_test, gy_train, gy_val, gy_test, _ = (
+                        grading_preprocessor.fit_transform(df, target_col="quality_label")
+                    )
+                    grading_trainer.preprocessor = grading_preprocessor
+                    grading_trainer.train_all_models(gX_train, gy_train, gX_val, gy_val, cv_folds=3)
                 grading_trainer.target_classes_ = grading_preprocessor.target_classes_
                 grading_trainer.evaluate_on_test(gX_test, gy_test)
                 grading_trainer.compute_feature_importance()
