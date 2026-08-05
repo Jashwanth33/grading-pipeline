@@ -26,7 +26,9 @@ export const apiService = {
   getFeatureImportance: () => api.get('/feature-importance'),
   getModelInfo: () => api.get('/model-info'),
   uploadDataset: (formData) =>
-    api.post('/upload-dataset', formData),
+    api.post('/upload-dataset', formData, {
+      headers: { 'Content-Type': undefined },
+    }),
 };
 
 export default apiService;
